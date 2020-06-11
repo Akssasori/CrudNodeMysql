@@ -33,9 +33,10 @@ app.get('/funcionarios',(req,res)=>{
     })
 });
 
+
 //Get um funcionarios
 //funcionarios/1
-app.delete('/funcionarios/:id',(req,res)=>{
+app.get('/funcionarios/:id',(req,res)=>{
     mysqlConnection.query('SELECT * FROM funcionarios WHERE ID = ?',[req.params.id],(err,rows, fields)=>{
         if(!err)
         res.send(rows);
@@ -45,11 +46,21 @@ app.delete('/funcionarios/:id',(req,res)=>{
 });
 
 //Delete um funcionarios
-/funcionarios/1
-app.get('/funcionarios/:id',(req,res)=>{
-    mysqlConnection.query('DELETE * FROM funcionarios WHERE ID = ?',[req.params.id],(err,rows, fields)=>{
+app.delete('/funcionarios/:id',(req,res)=>{
+    mysqlConnection.query('DELETE FROM funcionarios WHERE ID = ?',[req.params.id],(err,rows, fields)=>{
         if(!err)
-        res.send('dELETE ');
+        res.send('Deletado com sucesso ');
+        else
+        console.log(err);
+    })
+});
+
+//Inserindo um funcionarios
+app.post('/funcionarios',(req,res)=>{
+    let emp 
+    mysqlConnection.query(sql[],[req.params.id],(err,rows, fields)=>{
+        if(!err)
+        res.send('Deletado com sucesso ');
         else
         console.log(err);
     })
