@@ -9,7 +9,8 @@ var mysqlConnection = mysql.createConnection({
     host:'localhost',
     user: 'root',
     password: 'coti',
-    database: 'nodeDB' //Nome do Banco
+    database: 'nodeDB', //Nome do Banco
+    multipleStatements: true
     //employee é a tabela funcionarios
 });
 
@@ -57,10 +58,31 @@ app.delete('/funcionarios/:id',(req,res)=>{
 
 //Inserindo um funcionarios
 app.post('/funcionarios',(req,res)=>{
-    let emp 
-    mysqlConnection.query(sql[],[req.params.id],(err,rows, fields)=>{
+    let emp = req.body;
+    var sql = "SET @ID = ?;SET @NOME =?; SET @SALARIO =?; \
+    CALL FuncionariosAddOrEdit(@ID,@NOME,@SALARIO);"; 
+    mysqlConnection.query(sql,[emp.ID,emp.NOME,emp.SALARIO],[req.params.id],(err,rows, fields)=>{
         if(!err)
-        res.send('Deletado com sucesso ');
+        rows.forEach(element => {
+            if(element.constructor == Array)
+            res.send('Insira o funcionario id: '+element[0].ID );
+            
+        });
+        //res.send(rows);
+        else
+        console.log(err);
+    })
+});
+
+//atualiza um funcionarios
+app.put('/funcionarios',(req,res)=>{
+    let emp = req.body;
+    var sql = "SET @ID = ?;SET @NOME =?; SET @SALARIO =?; \
+    CALL FuncionariosAddOrEdit(@ID,@NOME,@SALARIO);"; 
+    mysqlConnection.query(sql,[emp.ID,emp.NOME,emp.SALARIO],[req.params.id],(err,rows, fields)=>{
+        if(!err)
+       res.send('atualiza com sucesso');
+        
         else
         console.log(err);
     })
